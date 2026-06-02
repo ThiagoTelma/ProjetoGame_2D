@@ -2,7 +2,6 @@ package AULA.DESAFIO;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.Timer;
 
 public class GameLoop extends Thread implements Runnable, ActionListener{
@@ -11,7 +10,7 @@ public class GameLoop extends Thread implements Runnable, ActionListener{
 	private long contadorDeFPS;
 	private Painel CenaDoJogo;
 	private EscutadorTeclado ET;
-	
+	public Painel painelSul;
 	
 	public GameLoop(Painel cenaDoJogo, EscutadorTeclado eT) {
 		System.out.println("GameLoop instanciado!");
@@ -47,8 +46,26 @@ public class GameLoop extends Thread implements Runnable, ActionListener{
 				if (bateu == false) {
 					CenaDoJogo.Jogador.atualizaPosicaoJogador(ET.movePraEsq, ET.movePraCima, 
 									ET.movePraDir, ET.movePraBaixo);
+									
+									// percorre todas as chaves do painel a cada frame
+									for (Chave c : CenaDoJogo.chaves) {
+										// só verifica chaves que ainda não foram coletadas
+										if (!c.coletada) {
+											// calcula a distância em pixels entre o jogador e a chave
+											int distX = Math.abs(CenaDoJogo.Jogador.posX - c.posX);
+											int distY = Math.abs(CenaDoJogo.Jogador.posY - c.posY);
+											// se estiver a menos de 24 pixels de distância em X e Y, coleta
+											// usamos distância em vez de quadradinho porque o passo é 3px
+											// e o jogador pode nunca cair exatamente no pixel exato da chave
+											if (distX < 24 && distY < 24) {
+												c.coletada = true; // marca como coletada, some do mapa
+												Painel.ChavesColetadas++; // soma 1 no contador da faixa amarela
+											}
+										}
+									}
 				}
 				CenaDoJogo.repaint();
+				if (painelSul != null) painelSul.repaint(); // painel amarelo redesenha atualiza contador
 				this.contadorDeFPS++;
 				tempoDecorrido = 0;
 			}

@@ -12,7 +12,14 @@ public class Painel extends JPanel{
 	EscutadorTeclado ET; 	//cria o escutador de teclado
 	SpriteLoop SL; 	//cria o loop do Sprite
 	tileMap cenario; 	//cria um TileMap
-	
+
+	public static int ChavesColetadas = 0; //variavel para contar as chaves coletadas
+	Chave[] chaves = {
+		new Chave(8 * 48, 4 * 48 ), //array para armazenar as chaves do jogo
+		new Chave(5 * 48, 5 * 48 ),
+		new Chave(5* 48, 2 * 48 ),
+	};
+
 	public Painel(String Posicao) {
 		this.Posicao = Posicao;
 		if (this.Posicao.equals("Centro")) {
@@ -42,7 +49,16 @@ public class Painel extends JPanel{
 			//desenha cenario do jogo
 			this.cenario.desenhar(D2);
 			Jogador.desenhaJogador(D2);
-			
+			D2.setColor(Color.orange);
+            for (Chave c : chaves) {
+                if (!c.coletada) {
+                    D2.fillOval(c.posX + 16, c.posY + 16, 16, 16);
+                }
+            }
+		} else {
+			D2.setColor(Color.black);
+			D2.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 24));
+            D2.drawString("Chaves: " + Painel.ChavesColetadas + "/3", 20, 40);
 		}
 	}
 }
