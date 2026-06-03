@@ -13,12 +13,14 @@ public class Painel extends JPanel{
 	SpriteLoop SL; 	//cria o loop do Sprite
 	tileMap cenario; 	//cria um TileMap
 
-	public static int ChavesColetadas = 0; //variavel para contar as chaves coletadas
-	Chave[] chaves = {
-		new Chave(8 * 48, 4 * 48 ), //array para armazenar as chaves do jogo
-		new Chave(5 * 48, 5 * 48 ),
-		new Chave(5* 48, 2 * 48 ),
+	public static int MoedasColetadas = 0; //variavel para contar as moedas coletadas
+	Moeda[] moedas = {
+		new Moeda(8 * 48, 4 * 48 ), //array para armazenar as moedas do jogo
+		new Moeda(5 * 48, 5 * 48 ),
+		new Moeda(5 * 48, 2 * 48 ),
 	};
+	Tocha tocha = new Tocha(6 * 48, 4 * 48); //tocha no cenario MA (Selva tranquila)
+	Colar colar = new Colar(5 * 48, 4 * 48); //colar no cenario TD (Selva perigosa)
 
 	public Painel(String Posicao) {
 		this.Posicao = Posicao;
@@ -49,16 +51,29 @@ public class Painel extends JPanel{
 			//desenha cenario do jogo
 			this.cenario.desenhar(D2);
 			Jogador.desenhaJogador(D2);
+			//desenha moedas no cenario
 			D2.setColor(Color.orange);
-            for (Chave c : chaves) {
-                if (!c.coletada) {
-                    D2.fillOval(c.posX + 16, c.posY + 16, 16, 16);
+            for (Moeda m : moedas) {
+                if (!m.coletada) {
+                    D2.fillOval(m.posX + 16, m.posY + 16, 16, 16);
                 }
             }
+			//desenha tocha no cenario
+			if (!tocha.coletada) {
+				D2.setColor(Color.cyan);
+				D2.fillOval(tocha.posX + 16, tocha.posY + 16, 16, 16);
+			}
+			//desenha colar no cenario
+			if (!colar.coletada) {
+				D2.setColor(Color.magenta);
+				D2.fillOval(colar.posX + 16, colar.posY + 16, 16, 16);
+			}
 		} else {
 			D2.setColor(Color.black);
-			D2.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 24));
-            D2.drawString("Chaves: " + Painel.ChavesColetadas + "/3", 20, 40);
+			D2.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14));
+			D2.drawString("Moedas: " + Painel.MoedasColetadas + "/3", 20, 25);
+			D2.drawString("Tocha: " + (Jogador.temTocha ? "Sim" : "Nao"), 20, 50);
+			D2.drawString("Colar: " + (Jogador.temColar ? "Sim" : "Nao"), 20, 75);
 		}
 	}
 }

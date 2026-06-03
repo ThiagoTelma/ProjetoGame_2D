@@ -47,20 +47,34 @@ public class GameLoop extends Thread implements Runnable, ActionListener{
 					CenaDoJogo.Jogador.atualizaPosicaoJogador(ET.movePraEsq, ET.movePraCima, 
 									ET.movePraDir, ET.movePraBaixo);
 									
-									// percorre todas as chaves do painel a cada frame
-									for (Chave c : CenaDoJogo.chaves) {
-										// só verifica chaves que ainda não foram coletadas
-										if (!c.coletada) {
-											// calcula a distância em pixels entre o jogador e a chave
-											int distX = Math.abs(CenaDoJogo.Jogador.posX - c.posX);
-											int distY = Math.abs(CenaDoJogo.Jogador.posY - c.posY);
-											// se estiver a menos de 24 pixels de distância em X e Y, coleta
-											// usamos distância em vez de quadradinho porque o passo é 3px
-											// e o jogador pode nunca cair exatamente no pixel exato da chave
+									// verifica coleta de moedas por proximidade
+									for (Moeda m : CenaDoJogo.moedas) {
+										if (!m.coletada) {
+											int distX = Math.abs(CenaDoJogo.Jogador.posX - m.posX);
+											int distY = Math.abs(CenaDoJogo.Jogador.posY - m.posY);
 											if (distX < 24 && distY < 24) {
-												c.coletada = true; // marca como coletada, some do mapa
-												Painel.ChavesColetadas++; // soma 1 no contador da faixa amarela
+												m.coletada = true;
+												Painel.MoedasColetadas++;
+												CenaDoJogo.Jogador.moedas++;
 											}
+										}
+									}
+									// verifica coleta da tocha
+									if (!CenaDoJogo.tocha.coletada) {
+										int distX = Math.abs(CenaDoJogo.Jogador.posX - CenaDoJogo.tocha.posX);
+										int distY = Math.abs(CenaDoJogo.Jogador.posY - CenaDoJogo.tocha.posY);
+										if (distX < 24 && distY < 24) {
+											CenaDoJogo.tocha.coletada = true;   // some do mapa
+											CenaDoJogo.Jogador.temTocha = true; // adiciona ao inventário
+										}
+									}
+									// verifica coleta do colar
+									if (!CenaDoJogo.colar.coletada) {
+										int distX = Math.abs(CenaDoJogo.Jogador.posX - CenaDoJogo.colar.posX);
+										int distY = Math.abs(CenaDoJogo.Jogador.posY - CenaDoJogo.colar.posY);
+										if (distX < 24 && distY < 24) {
+											CenaDoJogo.colar.coletada = true;   // some do mapa
+											CenaDoJogo.Jogador.temColar = true; // adiciona ao inventário
 										}
 									}
 				}
