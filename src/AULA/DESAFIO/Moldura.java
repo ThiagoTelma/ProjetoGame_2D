@@ -8,8 +8,11 @@ public class Moldura extends JFrame{
 	        this.setAlwaysOnTop(true);
 	        this.setLayout(new BorderLayout());
 	        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	        this.add(new Painel("Centro"), BorderLayout.CENTER);
-	        this.add(new Painel("Sul"), BorderLayout.SOUTH);
+            Painel painelSul = new Painel("Sul");
+            Painel painelCentro = new Painel("Centro");
+            painelCentro.GL.painelSul = painelSul;
+            this.add(painelCentro, BorderLayout.CENTER);
+            this.add(painelSul, BorderLayout.SOUTH);
 	        this.pack();
 	        this.setLocationRelativeTo(null);
 	        this.setVisible(true);    

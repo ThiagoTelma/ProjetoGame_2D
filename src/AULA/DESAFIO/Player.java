@@ -1,9 +1,7 @@
 package AULA.DESAFIO;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
-
 import javax.swing.ImageIcon;
 
 public class Player{
@@ -16,7 +14,10 @@ public class Player{
 	Rectangle AreaColisao;
 	public int posX, posY;
 	private int Larg, Altu;
-	public int passo = 3;	
+	public int passo = 3;
+	public boolean temTocha = false;	//indica se possui a tocha
+	public boolean temColar = false;	//indica se possui o colar
+	public int moedas = 0;				//quantidade de moedas coletadas
 
 	
 	public Player() {
