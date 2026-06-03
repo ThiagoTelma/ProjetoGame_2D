@@ -16,11 +16,11 @@ public class Painel extends JPanel{
 	SpriteLoop SL; 	//cria o loop do Sprite
 	tileMap cenario; 	//cria um TileMap
 
-	public static int MoedasColetadas = 0; 	//variavel para contar as moedas coletadas
+	public static int MoedasColetadas = 0; 	//variavel p contar moedas coletadas
 	public static boolean temTocha = false; //indica se o jogador possui a tocha
 	public static boolean temColar = false; //indica se o jogador possui o colar
 	Moeda[] moedas = {
-		new Moeda(7 * 48, 3 * 48, "BD"), //array para armazenar as moedas do jogo (labirinto)
+		new Moeda(7 * 48, 3 * 48, "BD"), //array p armazenar as moedas do jogo (labirinto)
 		new Moeda(14 * 48, 3 * 48, "BD"),
 		new Moeda(14 * 48, 9 * 48, "BD"),
 		new Moeda(7 * 48, 9 * 48, "BD"),
