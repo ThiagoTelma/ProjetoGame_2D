@@ -49,7 +49,7 @@ public class GameLoop extends Thread implements Runnable, ActionListener{
 									
 									// verifica coleta de moedas por proximidade
 									for (Moeda m : CenaDoJogo.moedas) {
-										if (!m.coletada) {
+										if (!m.coletada && CenaDoJogo.cenario.getCenaValida().equals(m.cenario)) {
 											int distX = Math.abs(CenaDoJogo.Jogador.posX - m.posX);
 											int distY = Math.abs(CenaDoJogo.Jogador.posY - m.posY);
 											if (distX < 24 && distY < 24) {
@@ -60,21 +60,23 @@ public class GameLoop extends Thread implements Runnable, ActionListener{
 										}
 									}
 									// verifica coleta da tocha
-									if (!CenaDoJogo.tocha.coletada) {
+									if (!CenaDoJogo.tocha.coletada && CenaDoJogo.cenario.getCenaValida().equals(CenaDoJogo.tocha.cenario)) {
 										int distX = Math.abs(CenaDoJogo.Jogador.posX - CenaDoJogo.tocha.posX);
 										int distY = Math.abs(CenaDoJogo.Jogador.posY - CenaDoJogo.tocha.posY);
 										if (distX < 24 && distY < 24) {
 											CenaDoJogo.tocha.coletada = true;   // some do mapa
-											CenaDoJogo.Jogador.temTocha = true; // adiciona ao inventário
+											CenaDoJogo.Jogador.temTocha = true; // adiciona ao inventário do jogador
+											Painel.temTocha = true;             // atualiza HUD
 										}
 									}
 									// verifica coleta do colar
-									if (!CenaDoJogo.colar.coletada) {
+									if (!CenaDoJogo.colar.coletada && CenaDoJogo.cenario.getCenaValida().equals(CenaDoJogo.colar.cenario)) {
 										int distX = Math.abs(CenaDoJogo.Jogador.posX - CenaDoJogo.colar.posX);
 										int distY = Math.abs(CenaDoJogo.Jogador.posY - CenaDoJogo.colar.posY);
 										if (distX < 24 && distY < 24) {
 											CenaDoJogo.colar.coletada = true;   // some do mapa
-											CenaDoJogo.Jogador.temColar = true; // adiciona ao inventário
+											CenaDoJogo.Jogador.temColar = true; // adiciona ao inventário do jogador
+											Painel.temColar = true;             // atualiza HUD
 										}
 									}
 				}
