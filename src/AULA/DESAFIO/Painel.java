@@ -19,6 +19,8 @@ public class Painel extends JPanel{
 	public static int MoedasColetadas = 0; 	//variavel p contar moedas coletadas
 	public static boolean temTocha = false; //indica se o jogador possui a tocha
 	public static boolean temColar = false; //indica se o jogador possui o colar
+	public static String mensagemTela = ""; //mensagem temporaria na tela
+	public static long tempoMensagem = 0;   //duracao da mensagem
 	Moeda[] moedas = {
 		new Moeda(7 * 48, 3 * 48, "BD"), //array p armazenar as moedas do jogo (labirinto)
 		new Moeda(14 * 48, 3 * 48, "BD"),
@@ -47,11 +49,11 @@ public class Painel extends JPanel{
 			this.addKeyListener(ET);
 			this.setFocusable(true);
 			//instancia Loop do Jogo
-			GL = new GameLoop(this, ET);	
+			GL = new GameLoop(this, ET);
 			GL.start();
 			//instancia Loop do Sprite
 			SL = new SpriteLoop(this, ET);
-			SL.start();	
+			SL.start();
 			//carrega o mapa da cena do jogo (matriz)
 			this.cenario = new tileMap();
 		} else {
@@ -67,6 +69,15 @@ public class Painel extends JPanel{
 			//desenha cenario do jogo
 			this.cenario.desenhar(D2);
 			Jogador.desenhaJogador(D2);
+			//exibe mensagem de porta falsa
+			if (!Painel.mensagemTela.isEmpty() && System.currentTimeMillis() < Painel.tempoMensagem) {
+				D2.setColor(new Color(0, 0, 0, 180));
+				D2.setColor(Color.black);
+				D2.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 16));
+				D2.drawString(Painel.mensagemTela, 260, 260);
+			} else {
+				Painel.mensagemTela = "";
+			}
 			//desenha moedas no cenario ativo
 			for (Moeda m : moedas) {
 				if (!m.coletada && cenario.getCenaValida().equals(m.cenario)) {

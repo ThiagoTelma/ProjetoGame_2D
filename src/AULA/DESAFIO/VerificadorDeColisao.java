@@ -28,31 +28,44 @@ public class VerificadorDeColisao {
 		int bordaBaseY= (int)Jogador.AreaColisao.getY() + (int)Jogador.AreaColisao.getHeight();
 		
 		//transformando em linhas e colunas da matriz da cena do jogo
-		this.colEsqX = (int)bordaEsqX/48;
-		this.colDirX = (int)bordaDirX/48;
-		this.rowTopoY= (int)bordaTopoY/48;
-		this.rowBaseY= (int)bordaBaseY/48;
+		int maxCol = CenaDoJogo.cenarioValido[0].length - 1;
+		int maxRow = CenaDoJogo.cenarioValido.length - 1;
+		this.colEsqX = Math.max(0, Math.min((int)bordaEsqX/48, maxCol));
+		this.colDirX = Math.max(0, Math.min((int)bordaDirX/48, maxCol));
+		this.rowTopoY= Math.max(0, Math.min((int)bordaTopoY/48, maxRow));
+		this.rowBaseY= Math.max(0, Math.min((int)bordaBaseY/48, maxRow));
 		
 		if (Direcao == "cima") {
-			//simula o avanço do jogador para verificar onde ele vai estar se o movimento acontecer
 			int prox_rowTopoY = (bordaTopoY - Jogador.passo)/48;
 			if (Jogador.AreaColisao.y < 0){
-				if (CenaDoJogo.getCenaValida() == "BD")
-					CenaDoJogo.setCenaValida("TD");
-				else
+				if (CenaDoJogo.getCenaValida() == "BD") {
+					//porta falsa (topo): bloqueia e avisa
+					Jogador.posY = 0;
+					Jogador.AreaColisao.y = 24;
+					Painel.mensagemTela = "Saida errada! Tente outra porta.";
+					Painel.tempoMensagem = System.currentTimeMillis() + 2000;
+					this.colidiu = true;
+				} else {
 					CenaDoJogo.setCenaValida("MA");
-				//posiciona o jogador no novo cenário
-				int alturaCenario = CenaDoJogo.cenarioValido.length *48;
-				Jogador.posY = alturaCenario - (int) Jogador.AreaColisao.getHeight();
+					int alturaCenario = CenaDoJogo.cenarioValido.length *48;
+					Jogador.posY = alturaCenario - (int) Jogador.AreaColisao.getHeight();
+				}
 			} else {
-				//verifica o topo do jogador pelo lado esquerdo
-				CenaDoJogo.pecaDoCenario.carregaPecaDaMatriz(CenaDoJogo.cenarioValido[prox_rowTopoY][colEsqX]);
-				if (CenaDoJogo.pecaDoCenario.isColisao())
+				//porta falsa (topo do BD): bloqueia antes de sair pelo topo
+				if (CenaDoJogo.getCenaValida() == "BD" && prox_rowTopoY == 0) {
 					this.colidiu = true;
-				//verifica o topo do jogador pelo lado direito
-				CenaDoJogo.pecaDoCenario.carregaPecaDaMatriz(CenaDoJogo.cenarioValido[prox_rowTopoY][colDirX]);
-				if (CenaDoJogo.pecaDoCenario.isColisao())
-					this.colidiu = true;
+					Painel.mensagemTela = "Saida errada! Tente outra porta.";
+					Painel.tempoMensagem = System.currentTimeMillis() + 2000;
+				} else {
+					//verifica o topo do jogador pelo lado esquerdo
+					CenaDoJogo.pecaDoCenario.carregaPecaDaMatriz(CenaDoJogo.cenarioValido[prox_rowTopoY][colEsqX]);
+					if (CenaDoJogo.pecaDoCenario.isColisao())
+						this.colidiu = true;
+					//verifica o topo do jogador pelo lado direito
+					CenaDoJogo.pecaDoCenario.carregaPecaDaMatriz(CenaDoJogo.cenarioValido[prox_rowTopoY][colDirX]);
+					if (CenaDoJogo.pecaDoCenario.isColisao())
+						this.colidiu = true;
+				}
 			}
 		}
 		else if (Direcao == "baixo") {
@@ -67,13 +80,21 @@ public class VerificadorDeColisao {
 				if (CenaDoJogo.pecaDoCenario.isColisao())
 					this.colidiu = true;	
 			} else {
-				if (CenaDoJogo.getCenaValida() == "MA")
+				if (CenaDoJogo.getCenaValida() == "MA") {
 					CenaDoJogo.setCenaValida("MB");
-				else
+					Jogador.posY = -(int)Jogador.AreaColisao.getHeight();
+				} else if (CenaDoJogo.getCenaValida() == "BD") {
+					//porta falsa (fundo): bloqueia e avisa
+					int alturaCenario = CenaDoJogo.cenarioValido.length * 48;
+					Jogador.posY = alturaCenario - (int)Jogador.AreaColisao.getHeight() - Jogador.passo;
+					Jogador.AreaColisao.y = Jogador.posY + 24;
+					Painel.mensagemTela = "Saida errada! Tente outra porta.";
+					Painel.tempoMensagem = System.currentTimeMillis() + 2000;
+					this.colidiu = true;
+				} else {
 					CenaDoJogo.setCenaValida("BD");
-				//posiciona o jogador no novo cenário
-				Jogador.posY = -(int)Jogador.AreaColisao.getHeight(); 
-
+					Jogador.posY = -(int)Jogador.AreaColisao.getHeight();
+				}
 			}
 		}
 		else if (Direcao == "direita") {
