@@ -17,7 +17,7 @@ public class Player{
 	public int passo = 7;
 	public boolean temTocha = false;	//indica se possui a tocha
 	public boolean temColar = false;	//indica se possui o colar
-	public int moedas = 2;				//quantidade de moedas coletadas
+	public int moedas = 0;				//quantidade de moedas coletadas
 
 	
 	public Player() {
