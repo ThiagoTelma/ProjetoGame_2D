@@ -1,2 +1,7 @@
 bin/
 src/AULA/DESAFIO/oracleJdk-26/
+
+.metadata/
+
+target/
+*.class

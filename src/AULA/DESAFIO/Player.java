@@ -14,7 +14,7 @@ public class Player{
 	Rectangle AreaColisao;
 	public int posX, posY;
 	private int Larg, Altu;
-	public int passo = 3;
+	public int passo = 7;
 	public boolean temTocha = false;	//indica se possui a tocha
 	public boolean temColar = false;	//indica se possui o colar
 	public int moedas = 0;				//quantidade de moedas coletadas

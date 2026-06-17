@@ -87,12 +87,12 @@ public class Painel extends JPanel{
 			}
 			//desenha tocha no cenario ativo
 			if (!tocha.coletada && cenario.getCenaValida().equals(tocha.cenario)) {
-				if (imgTocha != null) D2.drawImage(imgTocha, tocha.posX + 8, tocha.posY + 8, 32, 32, null);
+				if (imgTocha != null) D2.drawImage(imgTocha, tocha.posX + 8, tocha.posY + 8, 10, 32, null);
 				else { D2.setColor(Color.cyan); D2.fillOval(tocha.posX + 16, tocha.posY + 16, 16, 16); }
 			}
 			//desenha colar no cenario ativo
 			if (!colar.coletada && cenario.getCenaValida().equals(colar.cenario)) {
-				if (imgColar != null) D2.drawImage(imgColar, colar.posX + 8, colar.posY + 8, 32, 32, null);
+				if (imgColar != null) D2.drawImage(imgColar, colar.posX + 8, colar.posY + 8, 24, 32, null);
 				else { D2.setColor(Color.magenta); D2.fillOval(colar.posX + 16, colar.posY + 16, 16, 16); }
 			}
 		} else {
