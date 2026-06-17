@@ -151,14 +151,7 @@ public class VerificadorDeColisao {
 					this.colidiu = true;
 			}
 		}
-		
-		//mostra os dados no console apenas para conferência
-		System.out.println("colEsqX  = " + this.colEsqX);
-		System.out.println("colDirX  = " + this.colDirX);
-		System.out.println("rowTopoY = " + this.rowTopoY);
-		System.out.println("rowBaseY = " + this.rowBaseY);
-		System.out.println("-------------------------------");
-		
+
 		return colidiu;
 	}
 	

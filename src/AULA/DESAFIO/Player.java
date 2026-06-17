@@ -17,7 +17,7 @@ public class Player{
 	public int passo = 7;
 	public boolean temTocha = false;	//indica se possui a tocha
 	public boolean temColar = false;	//indica se possui o colar
-	public int moedas = 0;				//quantidade de moedas coletadas
+	public int moedas = 2;				//quantidade de moedas coletadas
 
 	
 	public Player() {
@@ -57,9 +57,6 @@ public class Player{
 		
 		this.AreaColisao.x = this.posX + 3;
 		this.AreaColisao.y = this.posY + this.Altu/2;;
-		
-		System.out.println("Coluna :" + (int)this.AreaColisao.x/48);
-		System.out.println("Linha  :" + (int)this.AreaColisao.y/48);
 		
 	}
 	public void atualizaSprite(boolean moveEsq, boolean moveCima, 

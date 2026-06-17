@@ -44,7 +44,6 @@ public class SpriteLoop extends Thread implements Runnable, ActionListener{
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("FPS Sprite: " + this.contadorDeFPS);
 		this.contadorDeFPS = 0;
 	}
 

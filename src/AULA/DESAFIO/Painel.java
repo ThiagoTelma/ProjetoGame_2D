@@ -10,15 +10,12 @@ import javax.swing.JPanel;
 
 public class Painel extends JPanel{
 	private String Posicao;
-	Player Jogador = new Player(); 	//instancia o Jogador no Painel
+	Player Jogador;
 	GameLoop GL; 	//cria o Loop do Jogo
 	EscutadorTeclado ET; 	//cria o escutador de teclado
 	SpriteLoop SL; 	//cria o loop do Sprite
 	tileMap cenario; 	//cria um TileMap
 
-	public static int MoedasColetadas = 0; 	//variavel p contar moedas coletadas
-	public static boolean temTocha = false; //indica se o jogador possui a tocha
-	public static boolean temColar = false; //indica se o jogador possui o colar
 	public static String mensagemTela = ""; //mensagem temporaria na tela
 	public static long tempoMensagem = 0;   //duracao da mensagem
 	Moeda[] moedas = {
@@ -28,8 +25,11 @@ public class Painel extends JPanel{
 		new Moeda(7 * 48, 9 * 48, "BD"),
 	};
 	Tocha tocha = new Tocha(6 * 48, 4 * 48, "MA"); //tocha no cenario MA (Selva tranquila)
+	public boolean tochaLiberada = false;
 	Colar colar = new Colar(5 * 48, 4 * 48, "TD"); //colar no cenario TD (Selva perigosa)
-
+	NPC indio = new NPC(8 * 48, 2 * 48, "MA");  //indio no cenario MA (Selva tranquila)
+	public boolean dialogoIndioAberto = false;
+	
 	//sprites dos itens
 	private BufferedImage imgMoeda = carregarImagem("res/ITEMS/moeda.png");
 	private BufferedImage imgTocha = carregarImagem("res/ITEMS/tocha.png");
@@ -40,7 +40,8 @@ public class Painel extends JPanel{
 		catch (Exception e) { return null; }
 	}
 
-	public Painel(String Posicao) {
+	public Painel(String Posicao, Player jogador) {
+		this.Jogador = jogador;
 		this.Posicao = Posicao;
 		if (this.Posicao.equals("Centro")) {
 			this.setBackground(Color.black);
@@ -86,7 +87,7 @@ public class Painel extends JPanel{
 				}
 			}
 			//desenha tocha no cenario ativo
-			if (!tocha.coletada && cenario.getCenaValida().equals(tocha.cenario)) {
+			if (tochaLiberada && !tocha.coletada && cenario.getCenaValida().equals(tocha.cenario)) {
 				if (imgTocha != null) D2.drawImage(imgTocha, tocha.posX + 8, tocha.posY + 8, 10, 32, null);
 				else { D2.setColor(Color.cyan); D2.fillOval(tocha.posX + 16, tocha.posY + 16, 16, 16); }
 			}
@@ -95,12 +96,49 @@ public class Painel extends JPanel{
 				if (imgColar != null) D2.drawImage(imgColar, colar.posX + 8, colar.posY + 8, 24, 32, null);
 				else { D2.setColor(Color.magenta); D2.fillOval(colar.posX + 16, colar.posY + 16, 16, 16); }
 			}
+			if(cenario.getCenaValida().equals(indio.cenario)) {
+				indio.desenhaNPC(D2);
+				
+				//balão de fala do indio
+				D2.setColor(Color.WHITE);
+				D2.fillRoundRect(
+				    indio.posX - 10,
+				    indio.posY - 65,
+				    230,
+				    55,
+				    10,
+				    10
+				);
+
+				D2.setColor(Color.BLACK);
+				D2.drawRoundRect(
+				    indio.posX - 10,
+				    indio.posY - 65,
+				    230,
+				    55,
+				    10,
+				    10
+				);
+
+				D2.drawString(
+				    "A escuridao domina o templo.",
+				    indio.posX + 5,
+				    indio.posY - 42
+				);
+
+				D2.drawString(
+				    "Sem fogo... voce nao sobrevivera!",
+				    indio.posX + 5,
+				    indio.posY - 22
+				);
+			}
+			
 		} else {
 			D2.setColor(Color.black);
 			D2.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14));
-			D2.drawString("Moedas: " + Painel.MoedasColetadas + "/4", 20, 25);
-			D2.drawString("Tocha: " + (Painel.temTocha ? "Sim" : "Nao"), 20, 50);
-			D2.drawString("Colar: " + (Painel.temColar ? "Sim" : "Nao"), 20, 75);
+			D2.drawString("Moedas: " + Jogador.moedas + "/4", 20, 25);
+			D2.drawString("Tocha: " + (Jogador.temTocha ? "Sim" : "Nao"), 20, 50);
+			D2.drawString("Colar: " + (Jogador.temColar ? "Sim" : "Nao"), 20, 75);
 		}
 	}
 }
