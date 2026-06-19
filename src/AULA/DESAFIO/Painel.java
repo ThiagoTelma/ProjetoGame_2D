@@ -11,23 +11,32 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import java.awt.Font;
+import java.awt.FontMetrics;
 
 public class Painel extends JPanel {
 	private String Posicao;
 	Player Jogador;
-	GameLoop GL; // cria o Loop do Jogo
-	EscutadorTeclado ET; // cria o escutador de teclado
-	SpriteLoop SL; // cria o loop do Sprite
-	tileMap cenario; // cria um TileMap
+	GameLoop GL; // 
+	EscutadorTeclado ET; 
+	SpriteLoop SL; 
+	tileMap cenario; 
+	
+	
+	// ----- Estados do jogo -----
+	public static final int ESTADO_INICIO = 0;
+	public static final int ESTADO_JOGANDO = 1;
+	public static final int ESTADO_FIM = 2;
+	public static int estadoJogo = ESTADO_INICIO;
+	public static int segundosJogados = 0;
 
 	public static String mensagemTela = ""; // mensagem temporaria na tela
 	public static long tempoMensagem = 0; // duracao da mensagem
-	Moeda[] moedas = { new Moeda(7 * 48, 3 * 48, "BD"), // array p armazenar as moedas do jogo (labirinto)
+	Moeda[] moedas = { new Moeda(7 * 48, 3 * 48, "BD"), 
 			new Moeda(14 * 48, 3 * 48, "BD"), new Moeda(14 * 48, 9 * 48, "BD"), new Moeda(7 * 48, 9 * 48, "BD"), };
-	Tocha tocha = new Tocha(6 * 48, 4 * 48, "MA"); // tocha no cenario MA (Selva tranquila)
+	Tocha tocha = new Tocha(6 * 48, 4 * 48, "MA"); 
 	public boolean tochaLiberada = false;
-	Colar colar = new Colar(5 * 48, 4 * 48, "TD"); // colar no cenario TD (Selva perigosa)
-	NPC indio = new NPC(8 * 48, 2 * 48, "MA"); // indio no cenario MA (Selva tranquila)
+	Colar colar = new Colar(5 * 48, 4 * 48, "TD"); 
+	NPC indio = new NPC(8 * 48, 2 * 48, "MA"); 
 	public boolean dialogoIndioAberto = false;
 
 	// sprites dos itens
@@ -52,6 +61,28 @@ public class Painel extends JPanel {
 			ET = new EscutadorTeclado();
 			this.addKeyListener(ET);
 			this.setFocusable(true);
+			
+			this.addMouseListener(new java.awt.event.MouseAdapter() {
+				@Override
+				public void mousePressed(java.awt.event.MouseEvent e) {
+					if (estadoJogo == ESTADO_FIM) {
+						int mx = e.getX();
+						int my = e.getY();
+						
+						// Define os limites do botão (devem ser os mesmos limites desenhados na tela)
+						int btnX = (getWidth() - 200) / 2;
+						int btnY = getHeight() - 80;
+						int btnLargura = 200;
+						int btnAltura = 40;
+						
+						// Verifica se o clique do usuário foi dentro do retângulo do botão
+						if (mx >= btnX && mx <= btnX + btnLargura && my >= btnY && my <= btnY + btnAltura) {
+							reiniciarJogo();
+						}
+					}
+				}
+			});
+			
 			// instancia Loop do Jogo
 			GL = new GameLoop(this, ET);
 			GL.start();
@@ -71,6 +102,18 @@ public class Painel extends JPanel {
 		D2.setColor(this.getBackground());
 		D2.fillRect(0, 0, this.getWidth(), this.getHeight());
 		if (this.Posicao.equals("Centro")) {
+			
+			if (estadoJogo == ESTADO_INICIO) {
+				desenharTelaInicio(D2);
+				return;
+			}
+ 
+			if (estadoJogo == ESTADO_FIM) {
+				desenharTelaFim(D2);
+				return;
+			}
+			
+			
 			// desenha cenario do jogo
 			this.cenario.desenhar(D2, Jogador);
 			Jogador.desenhaJogador(D2);
@@ -128,6 +171,10 @@ public class Painel extends JPanel {
 			}
 
 		} else {
+			
+			if (estadoJogo != ESTADO_JOGANDO) {
+				return;
+			}
 
 			int x = 0;
 			int y = 5;
@@ -219,7 +266,180 @@ public class Painel extends JPanel {
 
 				indiceItem++;
 			}
-
+			
+			D2.setColor(Color.WHITE);
+			D2.setFont(new Font("Arial", Font.BOLD, 16));
+			
+			int minutos = segundosJogados / 60;
+			int segundos = segundosJogados % 60;
+			String tempoFormatado = String.format("Tempo: %02d:%02d", minutos, segundos);
+			
+			// Desenha o tempo alinhado à direita do painel
+			D2.drawString(tempoFormatado, 600, y + 55);
 		}
+	}
+	
+	private void desenharTelaInicio(Graphics2D D2) {
+		D2.setRenderingHint(java.awt.RenderingHints.KEY_TEXT_ANTIALIASING, java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+	    D2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+	    
+		int largura = this.getWidth();
+		int altura = this.getHeight();
+ 
+		// fundo
+		D2.setColor(new Color(40, 24, 14));
+		D2.fillRect(0, 0, largura, altura);
+ 
+		// moldura decorativa
+		D2.setColor(new Color(222, 184, 135));
+		D2.setStroke(new java.awt.BasicStroke(4));
+		D2.drawRect(20, 20, largura - 40, altura - 40);
+ 
+		// titulo
+		D2.setColor(new Color(222, 184, 135));
+		Font fonteTitulo = new Font("Serif", Font.BOLD, 48);
+		D2.setFont(fonteTitulo);
+		FontMetrics fmTitulo = D2.getFontMetrics();
+		String titulo = "INDIANO GOMES";
+		int tituloX = (largura - fmTitulo.stringWidth(titulo)) / 2;
+		D2.drawString(titulo, tituloX, 170);
+ 
+		// subtitulo
+		D2.setColor(new Color(200, 160, 110));
+		Font fonteSub = new Font("Serif", Font.ITALIC, 18);
+		D2.setFont(fonteSub);
+		FontMetrics fmSub = D2.getFontMetrics();
+		String subtitulo = "Em busca do tesouro perdido";
+		int subX = (largura - fmSub.stringWidth(subtitulo)) / 2;
+		D2.drawString(subtitulo, subX, 205);
+ 
+		// instrucao piscando
+		if ((System.currentTimeMillis() / 600) % 2 == 0) {
+			D2.setColor(Color.WHITE);
+			Font fonteInstrucao = new Font("Arial", Font.BOLD, 18);
+			D2.setFont(fonteInstrucao);
+			FontMetrics fmInst = D2.getFontMetrics();
+			String instrucao = "Pressione ENTER para começar";
+			int instX = (largura - fmInst.stringWidth(instrucao)) / 2;
+			D2.drawString(instrucao, instX, altura - 80);
+		}
+ 
+		// dica de controles
+		D2.setColor(new Color(150, 120, 90));
+		Font fonteControles = new Font("Arial", Font.PLAIN, 13);
+		D2.setFont(fonteControles);
+		FontMetrics fmControles = D2.getFontMetrics();
+		String controles = "Use as setas do teclado para se mover";
+		int controlesX = (largura - fmControles.stringWidth(controles)) / 2;
+		D2.drawString(controles, controlesX, altura - 50);
+	}
+ 
+	private void desenharTelaFim(Graphics2D D2) {
+		D2.setRenderingHint(java.awt.RenderingHints.KEY_TEXT_ANTIALIASING, java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+	    D2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+		
+		int largura = this.getWidth();
+		int altura = this.getHeight();
+ 
+		D2.setColor(new Color(20, 16, 8));
+		D2.fillRect(0, 0, largura, altura);
+ 
+		D2.setColor(new Color(222, 184, 135));
+		D2.setStroke(new java.awt.BasicStroke(4));
+		D2.drawRect(20, 20, largura - 40, altura - 40);
+ 
+		D2.setColor(new Color(255, 215, 0));
+		Font fonteTitulo = new Font("Serif", Font.BOLD, 32);
+		D2.setFont(fonteTitulo);
+		FontMetrics fmTitulo = D2.getFontMetrics(fonteTitulo);
+		String titulo = "VOCÊ ENCONTROU O TESOURO!";
+		int tituloX = (largura - fmTitulo.stringWidth(titulo)) / 2;
+		D2.drawString(titulo, tituloX, 150);
+ 
+		D2.setColor(Color.WHITE);
+		Font fonteSub = new Font("Serif", Font.PLAIN, 20);
+		D2.setFont(fonteSub);
+		FontMetrics fmSub = D2.getFontMetrics(fonteSub);
+		String subtitulo = "Parabéns, aventureiro!";
+		int subX = (largura - fmSub.stringWidth(subtitulo)) / 2;
+		D2.drawString(subtitulo, subX, 195);
+		
+		int minutos = segundosJogados / 60;
+		int segundos = segundosJogados % 60;
+		String textoTempo = String.format("Tempo de Jogo: %02d:%02d", minutos, segundos);
+		
+		D2.setColor(new Color(255, 215, 0)); // Cor dourada para o tempo
+		D2.setFont(new Font("Arial", Font.BOLD, 16));
+		FontMetrics fmTempo = D2.getFontMetrics();
+		int tempoX = (largura - fmTempo.stringWidth(textoTempo)) / 2;
+		D2.drawString(textoTempo, tempoX, 260);
+		
+		// obrigado por jogar - texto
+		if ((System.currentTimeMillis() / 600) % 2 == 0) {
+	        D2.setColor(new Color(180, 150, 110));
+	        Font fonteRodape = new Font("Arial", Font.PLAIN, 14);
+	        D2.setFont(fonteRodape);
+	        FontMetrics fmRodape = D2.getFontMetrics(fonteRodape);
+	        String rodape = "Obrigado por jogar!";
+	        int rodapeX = (largura - fmRodape.stringWidth(rodape)) / 2;
+	        D2.drawString(rodape, rodapeX, 325); 
+	    }
+ 
+		int btnLargura = 200;
+		int btnAltura = 40;
+		int btnX = (largura - btnLargura) / 2;
+		int btnY = altura - 80;
+
+		// Fundo do botão
+		D2.setColor(new Color(90, 45, 35));
+		D2.fillRoundRect(btnX, btnY, btnLargura, btnAltura, 10, 10);
+		
+		// Borda do botão
+		D2.setColor(new Color(222, 184, 135));
+		D2.setStroke(new java.awt.BasicStroke(2));
+		D2.drawRoundRect(btnX, btnY, btnLargura, btnAltura, 10, 10);
+
+		// Texto interno do botão
+		D2.setColor(Color.WHITE);
+		D2.setFont(new Font("Arial", Font.BOLD, 16));
+		FontMetrics fmBtn = D2.getFontMetrics();
+		String txtBtn = "Voltar ao início";
+		int txtX = btnX + (btnLargura - fmBtn.stringWidth(txtBtn)) / 2;
+		int txtY = btnY + (btnAltura - fmBtn.getHeight()) / 2 + fmBtn.getAscent();
+		D2.drawString(txtBtn, txtX, txtY);
+		
+	}
+	
+	public void reiniciarJogo() {
+		// 1. Reseta os estados gerais
+		estadoJogo = ESTADO_INICIO;
+		segundosJogados = 0;
+		tochaLiberada = false;
+		dialogoIndioAberto = false;
+		mensagemTela = "";
+		
+		// 2. Reseta os itens do mapa para que apareçam de novo
+		tocha.coletada = false;
+		colar.coletada = false;
+		for (Moeda m : moedas) {
+			m.coletada = false;
+		}
+		
+		// 3. Reseta os atributos guardados no Jogador
+		Jogador.moedas = 0;
+		Jogador.temTocha = false;
+		Jogador.temColar = false;
+		
+		// 4. Reposiciona o jogador para o local inicial da vila
+		// (Ajuste os valores de posX e posY abaixo de acordo com as coordenadas iniciais corretas do seu jogo)
+		Jogador.posX = 336; 
+		Jogador.posY = 190;
+		
+		// 5. Retorna o mapa para o cenário inicial (Vila / TopEsq)
+		this.cenario.setCenaValida("TE");
+		
+		// 6. Força o foco de volta para o teclado e redesenha a tela
+		this.requestFocusInWindow();
+		this.repaint();
 	}
 }
