@@ -10,7 +10,7 @@ public class Tiles {
 	private String caminhoImg;
 	private Image imgAtual;
 	private Image imgGrass, imgSand, imgWall, imgWater;
-	private Image imgWhite, imgGray;
+	private Image imgWhite, imgGray, imgBlack;
 	private boolean colisao;
 
 	
@@ -38,6 +38,8 @@ public class Tiles {
 		this.imgWhite= icon.getImage();
 		icon = new ImageIcon("res/tiles/gray.png");
 		this.imgGray = icon.getImage();		
+		icon = new ImageIcon("res/tiles/black.png");
+		this.imgBlack = icon.getImage();
 		
 	}
 	
@@ -65,6 +67,10 @@ public class Tiles {
 		if (valorDaPeca == 5) {
 			this.imgAtual = this.imgGray;
 			this.colisao = true;
+		}
+		if (valorDaPeca == 6) {
+			this.imgAtual = this.imgBlack;
+			this.colisao = false;
 		}
 		
 		//if (this.colisao == true) 	this.imgAtual = this.imgGray;

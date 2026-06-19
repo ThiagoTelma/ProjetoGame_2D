@@ -111,7 +111,7 @@ public class GameLoop extends Thread implements Runnable, ActionListener{
 					}
 					
 					// verifica coleta da tocha
-					if (!CenaDoJogo.tocha.coletada && CenaDoJogo.cenario.getCenaValida().equals(CenaDoJogo.tocha.cenario)) {
+					if (!CenaDoJogo.tocha.coletada && CenaDoJogo.cenario.getCenaValida().equals(CenaDoJogo.tocha.cenario) && CenaDoJogo.tochaLiberada) {
 						int distX = Math.abs(CenaDoJogo.Jogador.posX - CenaDoJogo.tocha.posX);
 						int distY = Math.abs(CenaDoJogo.Jogador.posY - CenaDoJogo.tocha.posY);
 						if (distX < 24 && distY < 24) {
