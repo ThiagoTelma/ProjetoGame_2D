@@ -22,7 +22,7 @@ public class Player{
 	
 	public Player() {
 		//atributos do Jogador
-		this.posX = 384 - 48;
+		this.posX = 336;
 		this.posY = 190;
 		this.Larg = 48;
 		this.Altu = 48;

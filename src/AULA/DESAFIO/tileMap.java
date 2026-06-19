@@ -66,7 +66,7 @@ public class tileMap {
 			{ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 } };
 
 	public tileMap() {
-		this.cenarioValido = this.cenarioBasDir;
+		this.cenarioValido = this.cenarioTopEsq;
 		this.setCenaValida("TE");
 		this.pecaDoCenario = new Tiles();
 	}

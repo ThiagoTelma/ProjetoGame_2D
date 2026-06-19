@@ -17,5 +17,6 @@ public class Moldura extends JFrame{
 	        this.pack();
 	        this.setLocationRelativeTo(null);
 	        this.setVisible(true);    
+	        painelCentro.requestFocusInWindow();
 	 }
 }
