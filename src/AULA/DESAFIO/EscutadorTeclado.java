@@ -6,6 +6,7 @@ import java.awt.event.KeyListener;
 public class EscutadorTeclado implements KeyListener{
 	public boolean movePraBaixo, movePraCima, movePraEsq, movePraDir;
 	public boolean teclaEnter;
+	public boolean cavar;
 	
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -29,6 +30,9 @@ public class EscutadorTeclado implements KeyListener{
 			break;			
 		case KeyEvent.VK_DOWN: // Baixo (40)
 			this.movePraBaixo = true;
+			break;
+		case KeyEvent.VK_C: //tecla c
+			this.cavar = true;
 			break;
 		default:
 			System.out.println("Tecla sem Efeito: " + numTecla);
@@ -54,6 +58,9 @@ public class EscutadorTeclado implements KeyListener{
 			break;			
 		case KeyEvent.VK_DOWN:
 			this.movePraBaixo = false;
+			break;
+		case KeyEvent.VK_C:
+			this.cavar = false;
 			break;
 		}
 	}
