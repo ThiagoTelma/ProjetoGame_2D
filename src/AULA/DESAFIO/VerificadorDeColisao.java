@@ -39,33 +39,25 @@ public class VerificadorDeColisao {
 			int prox_rowTopoY = (bordaTopoY - Jogador.passo)/48;
 			if (Jogador.AreaColisao.y < 0){
 				if (CenaDoJogo.getCenaValida() == "BD") {
-					//porta falsa (topo): bloqueia e avisa
-					Jogador.posY = 0;
-					Jogador.AreaColisao.y = 24;
-					Painel.mensagemTela = "Saida errada! Tente outra porta.";
-					Painel.tempoMensagem = System.currentTimeMillis() + 2000;
-					this.colidiu = true;
+					// Saida REAL do topo do labirinto: sobe de BD para TD
+					// (par do "descer de TD -> BD"). Reposiciona na base do novo cenario.
+					CenaDoJogo.setCenaValida("TD");
+					int alturaCenario = CenaDoJogo.cenarioValido.length * 48;
+					Jogador.posY = alturaCenario - (int) Jogador.AreaColisao.getHeight();
 				} else {
 					CenaDoJogo.setCenaValida("MA");
 					int alturaCenario = CenaDoJogo.cenarioValido.length *48;
 					Jogador.posY = alturaCenario - (int) Jogador.AreaColisao.getHeight();
 				}
 			} else {
-				//porta falsa (topo do BD): bloqueia antes de sair pelo topo
-				if (CenaDoJogo.getCenaValida() == "BD" && prox_rowTopoY == 0) {
+				//verifica o topo do jogador pelo lado esquerdo
+				CenaDoJogo.pecaDoCenario.carregaPecaDaMatriz(CenaDoJogo.cenarioValido[prox_rowTopoY][colEsqX]);
+				if (CenaDoJogo.pecaDoCenario.isColisao())
 					this.colidiu = true;
-					Painel.mensagemTela = "Saida errada! Tente outra porta.";
-					Painel.tempoMensagem = System.currentTimeMillis() + 2000;
-				} else {
-					//verifica o topo do jogador pelo lado esquerdo
-					CenaDoJogo.pecaDoCenario.carregaPecaDaMatriz(CenaDoJogo.cenarioValido[prox_rowTopoY][colEsqX]);
-					if (CenaDoJogo.pecaDoCenario.isColisao())
-						this.colidiu = true;
-					//verifica o topo do jogador pelo lado direito
-					CenaDoJogo.pecaDoCenario.carregaPecaDaMatriz(CenaDoJogo.cenarioValido[prox_rowTopoY][colDirX]);
-					if (CenaDoJogo.pecaDoCenario.isColisao())
-						this.colidiu = true;
-				}
+				//verifica o topo do jogador pelo lado direito
+				CenaDoJogo.pecaDoCenario.carregaPecaDaMatriz(CenaDoJogo.cenarioValido[prox_rowTopoY][colDirX]);
+				if (CenaDoJogo.pecaDoCenario.isColisao())
+					this.colidiu = true;
 			}
 		}
 		else if (Direcao == "baixo") {
