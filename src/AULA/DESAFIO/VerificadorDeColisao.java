@@ -51,21 +51,14 @@ public class VerificadorDeColisao {
 					Jogador.posY = alturaCenario - (int) Jogador.AreaColisao.getHeight();
 				}
 			} else {
-				//porta falsa (topo do BD): bloqueia antes de sair pelo topo
-				if (CenaDoJogo.getCenaValida() == "BD" && prox_rowTopoY == 0) {
+				//verifica o topo do jogador pelo lado esquerdo
+				CenaDoJogo.pecaDoCenario.carregaPecaDaMatriz(CenaDoJogo.cenarioValido[prox_rowTopoY][colEsqX]);
+				if (CenaDoJogo.pecaDoCenario.isColisao())
 					this.colidiu = true;
-					Painel.mensagemTela = "Saida errada! Tente outra porta.";
-					Painel.tempoMensagem = System.currentTimeMillis() + 2000;
-				} else {
-					//verifica o topo do jogador pelo lado esquerdo
-					CenaDoJogo.pecaDoCenario.carregaPecaDaMatriz(CenaDoJogo.cenarioValido[prox_rowTopoY][colEsqX]);
-					if (CenaDoJogo.pecaDoCenario.isColisao())
-						this.colidiu = true;
-					//verifica o topo do jogador pelo lado direito
-					CenaDoJogo.pecaDoCenario.carregaPecaDaMatriz(CenaDoJogo.cenarioValido[prox_rowTopoY][colDirX]);
-					if (CenaDoJogo.pecaDoCenario.isColisao())
-						this.colidiu = true;
-				}
+				//verifica o topo do jogador pelo lado direito
+				CenaDoJogo.pecaDoCenario.carregaPecaDaMatriz(CenaDoJogo.cenarioValido[prox_rowTopoY][colDirX]);
+				if (CenaDoJogo.pecaDoCenario.isColisao())
+					this.colidiu = true;
 			}
 		}
 		else if (Direcao == "baixo") {
