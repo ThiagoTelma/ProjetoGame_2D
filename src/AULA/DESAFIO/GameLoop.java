@@ -38,6 +38,13 @@ public class GameLoop extends Thread implements Runnable, ActionListener {
 
 				if (Painel.estadoJogo == Painel.ESTADO_INICIO) {
 					if (ET.teclaEnter) {
+						Painel.estadoJogo = Painel.ESTADO_INTRODUCAO;
+						ET.teclaEnter = false;
+					}
+				}
+
+				if (Painel.estadoJogo == Painel.ESTADO_INTRODUCAO) {
+					if (ET.teclaEnter) {
 						Painel.segundosJogados = 0;
 						Painel.estadoJogo = Painel.ESTADO_JOGANDO;
 						ET.teclaEnter = false;
