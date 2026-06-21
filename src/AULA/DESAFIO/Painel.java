@@ -2,14 +2,14 @@ package AULA.DESAFIO;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-import java.awt.Font;
-import java.awt.FontMetrics;
 
 public class Painel extends JPanel {
 	private String Posicao;
@@ -23,6 +23,7 @@ public class Painel extends JPanel {
 	public static final int ESTADO_INICIO = 0;
 	public static final int ESTADO_JOGANDO = 1;
 	public static final int ESTADO_FIM = 2;
+	public static final int ESTADO_INTRODUCAO = 3;
 	public static int estadoJogo = ESTADO_INICIO;
 	public static int segundosJogados = 0;
 
@@ -114,6 +115,11 @@ public class Painel extends JPanel {
 
 			if (estadoJogo == ESTADO_INICIO) {
 				desenharTelaInicio(D2);
+				return;
+			}
+
+			if (estadoJogo == ESTADO_INTRODUCAO) {
+				desenharTelaIntroducao(D2);
 				return;
 			}
 
@@ -415,6 +421,86 @@ public class Painel extends JPanel {
 		}
 
 		// dica de controles
+		D2.setColor(new Color(150, 120, 90));
+		Font fonteControles = new Font("Arial", Font.PLAIN, 13);
+		D2.setFont(fonteControles);
+		FontMetrics fmControles = D2.getFontMetrics();
+		String controles = "Use as setas do teclado para se mover";
+		int controlesX = (largura - fmControles.stringWidth(controles)) / 2;
+		D2.drawString(controles, controlesX, altura - 50);
+	}
+
+	private void desenharTelaIntroducao(Graphics2D D2) {
+		D2.setRenderingHint(java.awt.RenderingHints.KEY_TEXT_ANTIALIASING,
+				java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		D2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+
+		int largura = this.getWidth();
+		int altura = this.getHeight();
+
+		// fundo
+		D2.setColor(new Color(40, 24, 14));
+		D2.fillRect(0, 0, largura, altura);
+
+		// moldura decorativa (mesma da tela de inicio)
+		D2.setColor(new Color(222, 184, 135));
+		D2.setStroke(new java.awt.BasicStroke(4));
+		D2.drawRect(20, 20, largura - 40, altura - 40);
+
+		// titulo da secao
+		Font fonteTitulo = new Font("Serif", Font.BOLD, 26);
+		D2.setFont(fonteTitulo);
+		FontMetrics fmTitulo = D2.getFontMetrics();
+		String titulo = "— A Missão —";
+		int tituloX = (largura - fmTitulo.stringWidth(titulo)) / 2;
+		D2.setColor(new Color(222, 184, 135));
+		D2.drawString(titulo, tituloX, 80);
+
+		// caixa pergaminho
+		int caixaX = 55;
+		int caixaY = 100;
+		int caixaLargura = largura - 110;
+		int caixaAltura = 240;
+
+		D2.setColor(new Color(60, 36, 18));
+		D2.fillRoundRect(caixaX, caixaY, caixaLargura, caixaAltura, 12, 12);
+		D2.setColor(new Color(200, 160, 110));
+		D2.setStroke(new java.awt.BasicStroke(1.5f));
+		D2.drawRoundRect(caixaX, caixaY, caixaLargura, caixaAltura, 12, 12);
+
+		// texto da introducao
+		D2.setColor(new Color(240, 220, 180));
+		Font fonteTexto = new Font("Serif", Font.PLAIN, 15);
+		D2.setFont(fonteTexto);
+		int lineHeight = 27;
+		int textX = caixaX + 22;
+		int textY = caixaY + 38;
+
+		String[] linhas = {
+			"Indiano Gomes recebeu um mapa misterioso que leva ao tesouro perdido de uma civilização antiga.",
+			"Para chegar até ele, você precisará explorar",
+			"6 cenários e coletar itens essenciais para concluir a missão.",
+			"",
+			"Converse com os habitantes locais, eles podem te ajudar."
+		};
+
+		for (String linha : linhas) {
+			D2.drawString(linha, textX, textY);
+			textY += lineHeight;
+		}
+
+		// instrucao piscando
+		if ((System.currentTimeMillis() / 600) % 2 == 0) {
+			D2.setColor(Color.WHITE);
+			Font fonteInstrucao = new Font("Arial", Font.BOLD, 18);
+			D2.setFont(fonteInstrucao);
+			FontMetrics fmInst = D2.getFontMetrics();
+			String instrucao = "Pressione ENTER para iniciar";
+			int instX = (largura - fmInst.stringWidth(instrucao)) / 2;
+			D2.drawString(instrucao, instX, altura - 80);
+		}
+
+		// dica de controles (igual a tela de inicio)
 		D2.setColor(new Color(150, 120, 90));
 		Font fonteControles = new Font("Arial", Font.PLAIN, 13);
 		D2.setFont(fonteControles);
