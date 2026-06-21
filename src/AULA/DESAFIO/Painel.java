@@ -460,7 +460,7 @@ public class Painel extends JPanel {
 		int caixaX = 55;
 		int caixaY = 100;
 		int caixaLargura = largura - 110;
-		int caixaAltura = 240;
+		int caixaAltura = 200;
 
 		D2.setColor(new Color(60, 36, 18));
 		D2.fillRoundRect(caixaX, caixaY, caixaLargura, caixaAltura, 12, 12);
@@ -478,8 +478,7 @@ public class Painel extends JPanel {
 
 		String[] linhas = {
 			"Indiano Gomes recebeu um mapa misterioso que leva ao tesouro perdido de uma civilização antiga.",
-			"Para chegar até ele, você precisará explorar",
-			"6 cenários e coletar itens essenciais para concluir a missão.",
+			"Para chegar até ele, você precisará explorar 6 cenários e coletar itens essenciais para concluir a missão.",
 			"",
 			"Converse com os habitantes locais, eles podem te ajudar."
 		};
