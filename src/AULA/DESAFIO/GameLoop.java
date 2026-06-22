@@ -64,7 +64,7 @@ public class GameLoop extends Thread implements Runnable, ActionListener {
 						direcao = "esquerda";
 
 					VerificadorDeColisao colisao = new VerificadorDeColisao();
-					boolean bateu = colisao.OcorreuColisao(this.CenaDoJogo.Jogador, this.CenaDoJogo.cenario, direcao, this.CenaDoJogo.spots);
+					boolean bateu = colisao.OcorreuColisao(this.CenaDoJogo.Jogador, this.CenaDoJogo.cenario, direcao, this.CenaDoJogo.spots, this.CenaDoJogo.cabanas);
 
 					if (!bateu) {
 						CenaDoJogo.Jogador.atualizaPosicaoJogador(ET.movePraEsq, ET.movePraCima, ET.movePraDir,
@@ -163,6 +163,12 @@ public class GameLoop extends Thread implements Runnable, ActionListener {
 						            "Você encontrou uma chave!"
 						        );
 						        
+						        ET.movePraEsq = false;
+						        ET.movePraDir = false;
+						        ET.movePraCima = false;
+						        ET.movePraBaixo = false;
+						        ET.cavar = false;
+						        
 						    }
 						}
 
@@ -180,7 +186,7 @@ public class GameLoop extends Thread implements Runnable, ActionListener {
 						}
 
 						// verifica coleta do colar e muda pra tela de fim
-						if (!CenaDoJogo.colar.coletada
+						if (!CenaDoJogo.Jogador.temColar
 								&& CenaDoJogo.cenario.getCenaValida().equals(CenaDoJogo.colar.cenario)) {
 							int distX = Math.abs(CenaDoJogo.Jogador.posX - CenaDoJogo.colar.posX);
 							int distY = Math.abs(CenaDoJogo.Jogador.posY - CenaDoJogo.colar.posY);

@@ -38,11 +38,14 @@ public class Painel extends JPanel {
 			new Moeda(14 * 48, 9 * 48, "BD"), new Moeda(7 * 48, 9 * 48, "BD") };
 	Tocha tocha = new Tocha(6 * 48, 4 * 48, "MA");
 	public boolean tochaLiberada = false;
-	Colar colar = new Colar((getWidth() - 24) / 2, getHeight() - 32, "BE");
+	Colar colar = new Colar((getWidth() - 24) / 2, (getHeight() - 32) / 2, "BE");
 	NPC indio = new NPC(8 * 48, 2 * 48, "MA");
 	public boolean dialogoIndioAberto = false;
 	public Spot[] spots = { new Spot(7 * 48, 1 * 48, "TD", false), new Spot(13 * 48, 4 * 48, "TD", false),
 			new Spot(12 * 48, 6 * 48, "TD", true), new Spot(7 * 48, 8 * 48, "TD", false) };
+	
+	public Estatua estatua = new Estatua((getWidth() - 24) / 2, (getHeight() - 32) / 2, "MB");
+	
 
 	// sprites dos itens
 	private BufferedImage imgMoeda = carregarImagem("res/ITEMS/moeda.png");
@@ -53,6 +56,9 @@ public class Painel extends JPanel {
 	private BufferedImage imgSpotOsso = carregarImagem("res/SPOT/buraco_osso.png");
 	private BufferedImage imgSpotChave = carregarImagem("res/SPOT/buraco_chave.png");
 	private BufferedImage imgSpotVazio = carregarImagem("res/SPOT/buraco_vazio.png");
+	private BufferedImage imgCabana = carregarImagem("res/CENARIO/cabana1.png");
+	private BufferedImage imgLoja = carregarImagem("res/CENARIO/loja.png");
+	private BufferedImage imgEstatua = carregarImagem("res/CENARIO/estatua.png");
 
 	private BufferedImage carregarImagem(String caminho) {
 		try {
@@ -61,6 +67,9 @@ public class Painel extends JPanel {
 			return null;
 		}
 	}
+	
+	public Cabana[] cabanas = {new Cabana(imgLoja, 5 * 48 + 8, 2 * 48 + 20, "TE"),  new Cabana(imgCabana, 11 * 48, 2 * 48 + 20, "TE")};	
+
 
 	public Painel(String Posicao, Player jogador) {
 		this.Jogador = jogador;
@@ -217,15 +226,26 @@ public class Painel extends JPanel {
 					}
 				}
 			}
-
+			
+			
+			// desenha estatua no cenario ativo
+			estatua.posX = (getWidth() - 24) / 2 - 15;
+			estatua.posY = (getHeight() - 32) / 2 - 60;
+						if (cenario.getCenaValida().equals(estatua.cenario) && Jogador.temTocha) {
+							D2.drawImage(imgEstatua, estatua.posX, estatua.posY, 54, 105, null);
+						}
+			
+			
 			// desenha tocha no cenario ativo
 			if (tochaLiberada && cenario.getCenaValida().equals(tocha.cenario)) {
 				D2.drawImage(imgTocha, tocha.posX + 8, tocha.posY + 8, 10, 32, null);
 			}
 
 			// desenha colar no cenario ativo
+			colar.posX = (getWidth() - 24) / 2;
+			colar.posY = (getHeight() - 32) / 2;
 			if (!colar.coletada && cenario.getCenaValida().equals(colar.cenario)) {
-				D2.drawImage(imgColar, (getWidth() - 24) / 2, (getHeight() - 32) / 2, 24, 32, null);
+				D2.drawImage(imgColar, colar.posX, colar.posY, 24, 32, null);
 			}
 
 			// NPC (indio)
@@ -243,8 +263,17 @@ public class Painel extends JPanel {
 
 				D2.drawString("Sem fogo... voce nao sobrevivera!", indio.posX + 5, indio.posY - 22);
 			}
+			
+			// desenha cabanas
+			for (Cabana cabana : cabanas) {
+				if(cenario.getCenaValida().equals(cabana.cenario)) {
+					D2.drawImage(cabana.img, cabana.posX - 55, cabana.posY - 102, 102, 78, null);
+				}
+			}
 
 			Jogador.desenhaJogador(D2);
+			
+			
 
 		} else {
 
@@ -605,7 +634,8 @@ public class Painel extends JPanel {
 		Jogador.moedas = 0;
 		Jogador.temTocha = false;
 		Jogador.temColar = false;
-
+		Jogador.temChave = false;
+		
 		// 4. Reposiciona o jogador para o local inicial da vila
 		// (Ajuste os valores de posX e posY abaixo de acordo com as coordenadas
 		// iniciais corretas do seu jogo)

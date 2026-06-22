@@ -13,7 +13,7 @@ public class VerificadorDeColisao {
 		// deve ficar vazio
 	}
 
-	public boolean OcorreuColisao(Player Jogador, tileMap CenaDoJogo, String Direcao, Spot[] spots) {
+	public boolean OcorreuColisao(Player Jogador, tileMap CenaDoJogo, String Direcao, Spot[] spots, Cabana[] cabanas) {
 		colidiu = false;
 		/*
 		 * Calculando o valor dos pontos A, B, C e D do Jogador temos que: ponto A =
@@ -59,6 +59,15 @@ public class VerificadorDeColisao {
 				continue;
 
 			if (futuraArea.intersects(spot.areaColisao)) {
+				return true;
+			}
+		}
+		
+		for (Cabana cabana : cabanas) {
+			if (!CenaDoJogo.getCenaValida().equals(cabana.cenario))
+				continue;
+
+			if (futuraArea.intersects(cabana.areaColisao)) {
 				return true;
 			}
 		}
@@ -190,7 +199,7 @@ public class VerificadorDeColisao {
 				else if (CenaDoJogo.getCenaValida() == "MB") {
 					if (!Jogador.temChave) {
 
-						Painel.mensagemTela = "A porta do templo esta trancada!";
+						Painel.mensagemTela = "Esta porta esta trancada!";
 						Painel.tempoMensagem = System.currentTimeMillis() + 2000;
 
 						this.colidiu = true;

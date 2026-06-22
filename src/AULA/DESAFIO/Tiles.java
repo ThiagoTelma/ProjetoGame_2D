@@ -9,7 +9,7 @@ public class Tiles {
 	private int posX, posY;
 	private String caminhoImg;
 	private Image imgAtual;
-	private Image imgGrass, imgSand, imgWall, imgWater, imgDoor;
+	private Image imgGrass, imgSand, imgWall, imgWater, imgDoor, imgTree, imgBrick;
 	private Image imgWhite, imgGray, imgBlack;
 	private boolean colisao;
 
@@ -42,6 +42,10 @@ public class Tiles {
 		this.imgBlack = icon.getImage();
 		icon = new ImageIcon("res/tiles/new/door.png");
 		this.imgDoor = icon.getImage();
+		icon = new ImageIcon("res/tiles/new/tree2.png");
+		this.imgTree = icon.getImage();
+		icon = new ImageIcon("res/tiles/new/brick.png");
+		this.imgBrick = icon.getImage();
 		
 	}
 	
@@ -66,9 +70,9 @@ public class Tiles {
 			this.imgAtual = this.imgWhite;
 			this.colisao = false;
 		}
-		if (valorDaPeca == 5) {
+		if (valorDaPeca == 9) {
 			this.imgAtual = this.imgGray;
-			this.colisao = false;
+			this.colisao = true;
 		}
 		if (valorDaPeca == 6) {
 			this.imgAtual = this.imgBlack;
@@ -76,6 +80,14 @@ public class Tiles {
 		}
 		if (valorDaPeca == 7) {
 			this.imgAtual = this.imgDoor;
+			this.colisao = false;
+		}
+		if (valorDaPeca == 8) {
+			this.imgAtual = this.imgTree;
+			this.colisao = true;
+		}
+		if (valorDaPeca == 5) {
+			this.imgAtual = this.imgBrick;
 			this.colisao = false;
 		}
 		
