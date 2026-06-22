@@ -14,10 +14,10 @@ public class Player{
 	Rectangle AreaColisao;
 	public int posX, posY;
 	private int Larg, Altu;
-	public int passo = 7;
-	public boolean temTocha = false;	//indica se possui a tocha
-	public boolean temColar = false;	//indica se possui o colar
-	public int moedas = 0;				//quantidade de moedas coletadas
+	public int passo = 3;
+	public boolean temTocha = false;
+	public boolean temColar = false;
+	public int moedas = 0;	
 	public boolean temChave = false;
 
 	
@@ -58,10 +58,9 @@ public class Player{
 		
 		this.AreaColisao.x = this.posX + 3;
 		this.AreaColisao.y = this.posY + this.Altu/2;;
-		
 	}
-	public void atualizaSprite(boolean moveEsq, boolean moveCima, 
-			boolean moveDir, boolean moveBaixo) {
+	
+	public void atualizaSprite(boolean moveEsq, boolean moveCima, boolean moveDir, boolean moveBaixo) {
 		this.frameJogador++;
 		if (moveEsq) {
 			if (frameJogador >= this.imgPlayerLeft.length)
