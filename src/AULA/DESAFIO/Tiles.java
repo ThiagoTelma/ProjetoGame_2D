@@ -9,7 +9,7 @@ public class Tiles {
 	private int posX, posY;
 	private String caminhoImg;
 	private Image imgAtual;
-	private Image imgGrass, imgSand, imgWall, imgWater;
+	private Image imgGrass, imgSand, imgWall, imgWater, imgDoor;
 	private Image imgWhite, imgGray, imgBlack;
 	private boolean colisao;
 
@@ -26,20 +26,22 @@ public class Tiles {
 	
 	private void carregaImagemTile() {
 		ImageIcon icon;
-		icon = new ImageIcon("res/tiles/grass1.png");
+		icon = new ImageIcon("res/tiles/new/grass1.png");
 		this.imgGrass = icon.getImage();
-		icon = new ImageIcon("res/tiles/sand1.png");
+		icon = new ImageIcon("res/tiles/new/sand1.png");
 		this.imgSand = icon.getImage();
-		icon = new ImageIcon("res/tiles/water1.png");
+		icon = new ImageIcon("res/tiles/new/water1.png");
 		this.imgWater = icon.getImage();
-		icon = new ImageIcon("res/tiles/wall1.png");
+		icon = new ImageIcon("res/tiles/new/wall1.png");
 		this.imgWall = icon.getImage();		
-		icon = new ImageIcon("res/tiles/white.png");
+		icon = new ImageIcon("res/tiles/new/white.png");
 		this.imgWhite= icon.getImage();
-		icon = new ImageIcon("res/tiles/gray.png");
+		icon = new ImageIcon("res/tiles/new/gray.png");
 		this.imgGray = icon.getImage();		
-		icon = new ImageIcon("res/tiles/black.png");
+		icon = new ImageIcon("res/tiles/new/black.png");
 		this.imgBlack = icon.getImage();
+		icon = new ImageIcon("res/tiles/new/door.png");
+		this.imgDoor = icon.getImage();
 		
 	}
 	
@@ -66,15 +68,18 @@ public class Tiles {
 		}
 		if (valorDaPeca == 5) {
 			this.imgAtual = this.imgGray;
-			this.colisao = true;
+			this.colisao = false;
 		}
 		if (valorDaPeca == 6) {
 			this.imgAtual = this.imgBlack;
 			this.colisao = false;
 		}
+		if (valorDaPeca == 7) {
+			this.imgAtual = this.imgDoor;
+			this.colisao = false;
+		}
 		
-		//if (this.colisao == true) 	this.imgAtual = this.imgGray;
-		//else						this.imgAtual = this.imgWhite;
+		
 	}
 	public boolean isColisao() {
 		return colisao;

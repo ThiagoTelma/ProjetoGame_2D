@@ -38,7 +38,7 @@ public class Painel extends JPanel {
 			new Moeda(14 * 48, 9 * 48, "BD"), new Moeda(7 * 48, 9 * 48, "BD") };
 	Tocha tocha = new Tocha(6 * 48, 4 * 48, "MA");
 	public boolean tochaLiberada = false;
-	Colar colar = new Colar(5 * 48, 4 * 48, "BE");
+	Colar colar = new Colar((getWidth() - 24) / 2, getHeight() - 32, "BE");
 	NPC indio = new NPC(8 * 48, 2 * 48, "MA");
 	public boolean dialogoIndioAberto = false;
 	public Spot[] spots = { new Spot(7 * 48, 1 * 48, "TD", false), new Spot(13 * 48, 4 * 48, "TD", false),
@@ -225,7 +225,7 @@ public class Painel extends JPanel {
 
 			// desenha colar no cenario ativo
 			if (!colar.coletada && cenario.getCenaValida().equals(colar.cenario)) {
-				D2.drawImage(imgColar, colar.posX + 8, colar.posY + 8, 24, 32, null);
+				D2.drawImage(imgColar, (getWidth() - 24) / 2, (getHeight() - 32) / 2, 24, 32, null);
 			}
 
 			// NPC (indio)
