@@ -158,6 +158,14 @@ public class Painel extends JPanel {
 				ultimoCenarioAviso = cenario.getCenaValida();
 			}
 
+			
+			// desenha estatua no cenario ativo
+						estatua.posX = (getWidth() - 24) / 2 - 15;
+						estatua.posY = (getHeight() - 32) / 2 - 60;
+									if (cenario.getCenaValida().equals(estatua.cenario) && Jogador.temTocha) {
+										D2.drawImage(imgEstatua, estatua.posX, estatua.posY, 54, 105, null);
+									}
+									
 			// exibe mensagem de porta falsa e da dica de cavar
 			if (!Painel.mensagemTela.isEmpty() && System.currentTimeMillis() < Painel.tempoMensagem) {
 				String texto = Painel.mensagemTela;
@@ -228,12 +236,7 @@ public class Painel extends JPanel {
 			}
 			
 			
-			// desenha estatua no cenario ativo
-			estatua.posX = (getWidth() - 24) / 2 - 15;
-			estatua.posY = (getHeight() - 32) / 2 - 60;
-						if (cenario.getCenaValida().equals(estatua.cenario) && Jogador.temTocha) {
-							D2.drawImage(imgEstatua, estatua.posX, estatua.posY, 54, 105, null);
-						}
+			
 			
 			
 			// desenha tocha no cenario ativo
